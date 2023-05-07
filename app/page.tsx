@@ -1,8 +1,12 @@
+import { Container } from '@/components';
+
 const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Novus Dex</h1>
-    </main>
+    <Container className="">
+      <main className="pt-32 text-dark dark:text-light">
+        <h1>Novus Dex</h1>
+      </main>
+    </Container>
   );
 };
 
