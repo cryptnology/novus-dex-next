@@ -4,8 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-typechain
-typechain-types
 
 # testing
 /coverage
@@ -35,7 +33,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# Hardhat files
-cache
-artifacts
