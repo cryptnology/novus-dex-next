@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Blockies from 'react-blockies';
-import { Container, ToggleThemeButton } from '@/components';
+import { Container, Dropdown, ToggleThemeButton } from '@/components';
 import { Wallet } from '@/icons';
 import {
   useBlockchainStore,
@@ -51,9 +51,10 @@ const NavBar = () => {
           Novus
         </div>
       </div>
+      <Dropdown />
       <div className="flex items-center">
         <div
-          className={`bg-primary/40 dark:bg-primaryDark/40 h-[46px] ${
+          className={`bg-primary/40 dark:bg-secondaryDark h-[46px] ${
             account ? 'px-6' : 'pl-6'
           } flex items-center rounded-xl transition`}
         >
