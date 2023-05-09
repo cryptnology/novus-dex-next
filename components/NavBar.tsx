@@ -4,10 +4,14 @@ import { useEffect } from 'react';
 import Blockies from 'react-blockies';
 import { Container, ToggleThemeButton } from '@/components';
 import { Wallet } from '@/icons';
-import { useBlockchainStore } from '@/store';
+import {
+  useBlockchainStore,
+  loadAccount,
+  loadNetwork,
+  loadProvider,
+} from '@/store';
 
-import config from '../config.json';
-import { loadAccount, loadNetwork, loadProvider } from '@/store/interactions';
+import config from '@/store/config.json';
 
 const NavBar = () => {
   const {
@@ -70,6 +74,7 @@ const NavBar = () => {
                     `${config[chainId].explorerURL}/address/${account}`
                   : `#`
               }
+              target="_blank"
             >
               {account.slice(0, 5) + '...' + account.slice(38, 42)}
               <Blockies
