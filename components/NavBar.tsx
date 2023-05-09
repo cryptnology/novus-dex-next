@@ -5,9 +5,9 @@ import Blockies from 'react-blockies';
 import { Container, ToggleThemeButton } from '@/components';
 import { Wallet } from '@/icons';
 import { useBlockchainStore } from '@/store';
-import { ethers } from 'ethers';
 
 import config from '../config.json';
+import { loadAccount, loadNetwork, loadProvider } from '@/store/interactions';
 
 const NavBar = () => {
   const {
@@ -22,31 +22,22 @@ const NavBar = () => {
   } = useBlockchainStore();
 
   const loadBlockchainData = async () => {
-    const connection = new ethers.providers.Web3Provider(window.ethereum);
-    setProvider(connection);
-    const { chainId } = await connection.getNetwork();
-    setChainId(chainId);
-    const accounts = await window.ethereum.request({
-      method: 'eth_requestAccounts',
-    });
-    const account = ethers.utils.getAddress(accounts[0]);
-    setAccount(account);
-
-    const balance = await connection.getBalance(account);
-    const formattedBalance = ethers.utils.formatEther(balance);
-    setBalance(formattedBalance);
+    const provider = loadProvider(setProvider);
+    const chainId = await loadNetwork(provider, setChainId);
 
     // Reload page when network changes
     window.ethereum.on('chainChanged', () => {
       window.location.reload();
     });
+
+    // Fetch current account & balance from Metamask when changed
+    window.ethereum.on('accountsChanged', () => {
+      loadAccount(provider, setAccount, setBalance);
+    });
   };
 
   useEffect(() => {
     loadBlockchainData();
-    window.ethereum.on('accountsChanged', () => {
-      loadBlockchainData();
-    });
   }, []);
 
   return (
@@ -92,7 +83,11 @@ const NavBar = () => {
               />
             </a>
           ) : (
-            <button className="px-6 py-2 text-light font-bold bg-primary rounded-xl hover:bg-light hover:text-dark border-[3px] border-transparent hover:border-primary dark:bg-primaryDark dark:text-dark dark:hover:text-light dark:hover:border-primaryDark dark:hover:border-[3px] dark:hover:bg-dark transition duration-300">
+            <button
+              className="px-6 py-2 text-light font-bold bg-primary rounded-xl hover:bg-light hover:text-dark border-[3px] border-transparent hover:border-primary dark:bg-primaryDark dark:text-dark dark:hover:text-light dark:hover:border-primaryDark dark:hover:border-[3px] dark:hover:bg-dark transition duration-300"
+              // @ts-ignore
+              onClick={() => loadAccount(provider, setAccount, setBalance)}
+            >
               Connect
             </button>
           )}
