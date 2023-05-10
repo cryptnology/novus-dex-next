@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   Connect,
@@ -9,13 +9,13 @@ import {
   Logo,
   MobileMenu,
   ToggleThemeButton,
-} from '@/components';
+} from "@/components";
 import {
   useBlockchainStore,
   loadAccount,
   loadNetwork,
   loadProvider,
-} from '@/store';
+} from "@/store";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,12 +32,12 @@ const NavBar = () => {
     const chainId = await loadNetwork(provider, setChainId);
 
     // Reload page when network changes
-    window.ethereum.on('chainChanged', () => {
+    window.ethereum.on("chainChanged", () => {
       window.location.reload();
     });
 
     // Fetch current account & balance from Metamask when changed
-    window.ethereum.on('accountsChanged', () => {
+    window.ethereum.on("accountsChanged", () => {
       loadAccount(provider, setAccount, setBalance);
     });
   };
