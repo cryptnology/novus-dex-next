@@ -5,19 +5,15 @@ import { Moon, Sun } from '@/icons';
 
 interface Props {
   className?: string;
-  toggle?: () => void;
 }
 
-const ToggleThemeButton = ({ className, toggle }: Props) => {
+const ToggleThemeButton = ({ className }: Props) => {
   const { theme, setTheme } = useTheme();
 
   return (
     <button
       className={`${className} cursor-default lg:cursor-pointer`}
-      onClick={() => {
-        setTheme(theme === 'light' ? 'dark' : 'light');
-        toggle && toggle();
-      }}
+      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
     >
       {theme === 'light' ? (
         <Sun className="fill-dark" />

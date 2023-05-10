@@ -7,7 +7,11 @@ import { HiOutlineChevronDown } from 'react-icons/hi';
 import { SlHome } from 'react-icons/sl';
 import { FaEthereum } from 'react-icons/fa';
 
-const Dropdown = () => {
+interface Props {
+  className?: string;
+}
+
+const Dropdown = ({ className }: Props) => {
   const { chainId } = useBlockchainStore();
 
   const networkHandler = async (chainId: string) => {
@@ -18,7 +22,7 @@ const Dropdown = () => {
   };
 
   return (
-    <div className="">
+    <div className={className}>
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button

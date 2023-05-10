@@ -1,5 +1,9 @@
+export { default as CheckOutsideClick } from './CheckOutsideClick';
+export { default as Connect } from './Connect';
 export { default as Container } from './Container';
 export { default as Dropdown } from './Dropdown';
+export { default as Logo } from './Logo';
+export { default as MobileMenu } from './MobileMenu';
 export { default as NavBar } from './NavBar';
 export { default as Providers } from './Providers';
 export { default as ToggleThemeButton } from './ToggleThemeButton';
