@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Blockies from 'react-blockies';
-import { useBlockchainStore, loadAccount } from '@/store';
-import { Wallet } from '@/icons';
+import Blockies from "react-blockies";
+import { useUserStore, loadAccount } from "@/store";
+import { Wallet } from "@/icons";
 
-import config from '../store/config.json';
+import config from "../store/config.json";
 
 interface Props {
   className?: string;
@@ -12,18 +12,18 @@ interface Props {
 
 const Connect = ({ className }: Props) => {
   const { provider, account, balance, chainId, setAccount, setBalance } =
-    useBlockchainStore();
+    useUserStore();
 
   return (
     <div
       className={`bg-primary/40 dark:bg-secondaryDark h-[46px] ${
-        account ? 'px-6' : 'pl-6'
+        account ? "px-6" : "pl-6"
       } flex items-center rounded-xl transition ${className}`}
     >
       <div className="pr-4 text-dark dark:text-light flex items-center">
         <Wallet className="w-6" />
         <span className="ml-3 text-sm">
-          {balance ? Number(balance).toFixed(4) : '0'}
+          {balance ? Number(balance).toFixed(4) : "0"}
           <span className="ml-1 font-bold">ETH</span>
         </span>
       </div>
@@ -39,7 +39,7 @@ const Connect = ({ className }: Props) => {
           }
           target="_blank"
         >
-          {account.slice(0, 5) + '...' + account.slice(38, 42)}
+          {account.slice(0, 5) + "..." + account.slice(38, 42)}
           <Blockies
             seed={account}
             size={10}

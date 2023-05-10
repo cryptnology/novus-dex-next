@@ -1,22 +1,23 @@
-'use client';
+"use client";
 
-import { useBlockchainStore } from '@/store';
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
-import { HiOutlineChevronDown } from 'react-icons/hi';
-import { SlHome } from 'react-icons/sl';
-import { FaEthereum } from 'react-icons/fa';
+import { useUserStore } from "@/store";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { HiOutlineChevronDown } from "react-icons/hi";
+import { SlHome } from "react-icons/sl";
+import { FaEthereum } from "react-icons/fa";
 
 interface Props {
   className?: string;
 }
 
 const Dropdown = ({ className }: Props) => {
-  const { chainId } = useBlockchainStore();
+  const { chainId } = useUserStore();
 
   const networkHandler = async (chainId: string) => {
+    // @ts-ignore
     await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
+      method: "wallet_switchEthereumChain",
       params: [{ chainId }],
     });
   };
@@ -29,9 +30,9 @@ const Dropdown = ({ className }: Props) => {
             className="flex items-center px-4 py-2 text-light font-bold bg-primary rounded-xl hover:bg-light hover:text-dark border-[3px] border-transparent hover:border-primary dark:bg-primaryDark dark:text-dark dark:hover:text-light dark:hover:border-primaryDark dark:hover:border-[3px] dark:hover:bg-dark transition duration-300"
             disabled={!chainId}
           >
-            {chainId && chainId === 31337 && 'Localhost'}
-            {chainId && chainId === 5 && 'Goerli'}
-            {!chainId && 'Network'}
+            {chainId && chainId === 31337 && "Localhost"}
+            {chainId && chainId === 5 && "Goerli"}
+            {!chainId && "Network"}
             <HiOutlineChevronDown className="ml-2" size={20} />
           </Menu.Button>
         </div>
@@ -51,10 +52,10 @@ const Dropdown = ({ className }: Props) => {
                   <button
                     className={`${
                       active
-                        ? 'bg-primary dark:bg-secondaryDark text-light'
-                        : 'text-dark'
+                        ? "bg-primary dark:bg-secondaryDark text-light"
+                        : "text-dark"
                     } group flex w-full items-center rounded-xl px-2 py-2 text-sm`}
-                    onClick={() => networkHandler('0x7A69')}
+                    onClick={() => networkHandler("0x7A69")}
                   >
                     <SlHome className="mr-2" size={12} />
                     Localhost
@@ -66,10 +67,10 @@ const Dropdown = ({ className }: Props) => {
                   <button
                     className={`${
                       active
-                        ? 'bg-primary dark:bg-secondaryDark text-light'
-                        : 'text-dark'
+                        ? "bg-primary dark:bg-secondaryDark text-light"
+                        : "text-dark"
                     } group flex w-full items-center rounded-xl px-2 py-2 text-sm`}
-                    onClick={() => networkHandler('0x5')}
+                    onClick={() => networkHandler("0x5")}
                   >
                     <FaEthereum className="mr-2" />
                     Goerli
