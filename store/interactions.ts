@@ -82,12 +82,17 @@ export const loadExchange = async (
 // LOAD USER BALANCES (WALLET & EXCHANGE BALANCES)
 
 export const loadBalances = async (
+  exchange: Contract,
   tokens: { token: Contract; symbol: string }[],
   account: string,
   setTokenOneBalance: (balance: string) => void,
   setTokenTwoBalance: (balance: string) => void,
-  setLoaded: (loaded: boolean) => void
+  setLoaded: (loaded: boolean) => void,
+  setExchangeTokenOneBalance: (balance: string) => void,
+  setExchangeTokenTwoBalance: (balance: string) => void,
+  setExchangeLoaded: (loaded: boolean) => void
 ) => {
+  // Tokens
   let balance = ethers.utils.formatUnits(
     await tokens[0].token.balanceOf(account),
     18
@@ -104,4 +109,23 @@ export const loadBalances = async (
   setLoaded(false);
   setTokenTwoBalance(balance);
   setLoaded(true);
+
+  // Exchange
+  balance = ethers.utils.formatUnits(
+    await exchange.balanceOf(tokens[0].token.address, account),
+    18
+  );
+
+  setExchangeLoaded(false);
+  setExchangeTokenOneBalance(balance);
+  setExchangeLoaded(true);
+
+  balance = ethers.utils.formatUnits(
+    await exchange.balanceOf(tokens[1].token.address, account),
+    18
+  );
+
+  setExchangeLoaded(false);
+  setExchangeTokenTwoBalance(balance);
+  setExchangeLoaded(true);
 };

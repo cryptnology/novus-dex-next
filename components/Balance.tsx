@@ -1,26 +1,43 @@
 "use client";
 
-import { loadBalances, useTokensStore, useUserStore } from "@/store";
+import {
+  loadBalances,
+  useExchangeStore,
+  useTokensStore,
+  useUserStore,
+} from "@/store";
+import { Contract } from "ethers";
 import { useEffect } from "react";
 
 const Balance = () => {
   const { account } = useUserStore();
   const {
     contracts: tokens,
-    balances,
+    balances: tokenBalances,
     setTokenOneBalance,
     setTokenTwoBalance,
     setLoaded,
   } = useTokensStore();
+  const {
+    contract: exchange,
+    balances: exchangeTokenBalances,
+    setTokenOneBalance: setExchangeTokenOneBalance,
+    setTokenTwoBalance: setExchangeTokenTwoBalance,
+    setLoaded: setExchangeLoaded,
+  } = useExchangeStore();
 
   useEffect(() => {
-    if (tokens[0] && tokens[1] && account)
+    if (exchange && tokens[0] && tokens[1] && account)
       loadBalances(
+        exchange as Contract,
         tokens,
         account,
         setTokenOneBalance,
         setTokenTwoBalance,
-        setLoaded
+        setLoaded,
+        setExchangeTokenOneBalance,
+        setExchangeTokenTwoBalance,
+        setExchangeLoaded
       );
   }, [account]);
 
