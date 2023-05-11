@@ -64,6 +64,20 @@ export const loadTokens = async (
   return tokens;
 };
 
+export const loadExchange = async (
+  provider: providers.Web3Provider,
+  address: string,
+  setContract: (contract: Contract) => void,
+  setLoaded: (loaded: boolean) => void
+) => {
+  const exchange = new ethers.Contract(address, EXCHANGE.abi, provider);
+
+  setContract(exchange);
+  setLoaded(true);
+
+  return exchange;
+};
+
 // ---------------------------------------------------------------------
 // LOAD USER BALANCES (WALLET & EXCHANGE BALANCES)
 

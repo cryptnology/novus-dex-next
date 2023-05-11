@@ -17,6 +17,8 @@ import {
   loadProvider,
   useTokensStore,
   loadTokens,
+  useExchangeStore,
+  loadExchange,
 } from "@/store";
 
 import config from "../store/config.json";
@@ -29,7 +31,10 @@ const NavBar = () => {
   };
 
   const { setProvider, setChainId, setAccount, setBalance } = useUserStore();
-  const { setContracts, setLoaded } = useTokensStore();
+  const { setContracts: setTokens, setLoaded: setTokensLoaded } =
+    useTokensStore();
+  const { setContract: setExchange, setLoaded: setExchangeLoaded } =
+    useExchangeStore();
 
   const loadBlockchainData = async () => {
     const provider = loadProvider(setProvider);
@@ -55,8 +60,18 @@ const NavBar = () => {
     await loadTokens(
       provider,
       [novus.address, mETH.address],
-      setContracts,
-      setLoaded
+      setTokens,
+      setTokensLoaded
+    );
+
+    // Load exchange smart contract
+    // @ts-ignore
+    const exchangeConfig = config[chainId].exchange;
+    const exchange = await loadExchange(
+      provider,
+      exchangeConfig.address,
+      setExchange,
+      setExchangeLoaded
     );
   };
 
