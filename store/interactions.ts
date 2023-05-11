@@ -1,7 +1,7 @@
 import { Contract, ethers, providers } from "ethers";
 
-import TOKEN from "@/blockchain/artifacts/contracts/Token.sol/Token.json";
-import EXCHANGE from "@/blockchain/artifacts/contracts/Exchange.sol/Exchange.json";
+import TOKEN from "@/blockchain/artifacts/blockchain/contracts/Token.sol/Token.json";
+import EXCHANGE from "@/blockchain/artifacts/blockchain/contracts/Exchange.sol/Exchange.json";
 
 export const loadProvider = (
   setProvider: (provider: providers.Web3Provider) => void
