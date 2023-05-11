@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Container } from '@/components';
+import { Balance, Container } from "@/components";
 
 const Home = () => {
   return (
     <Container className="">
       <main className="pt-32 text-dark dark:text-light transition">
-        <h1>Novus Dex</h1>
+        <Balance />
       </main>
     </Container>
   );

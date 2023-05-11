@@ -63,3 +63,31 @@ export const loadTokens = async (
 
   return tokens;
 };
+
+// ---------------------------------------------------------------------
+// LOAD USER BALANCES (WALLET & EXCHANGE BALANCES)
+
+export const loadBalances = async (
+  tokens: { token: Contract; symbol: string }[],
+  account: string,
+  setTokenOneBalance: (balance: string) => void,
+  setTokenTwoBalance: (balance: string) => void,
+  setLoaded: (loaded: boolean) => void
+) => {
+  let balance = ethers.utils.formatUnits(
+    await tokens[0].token.balanceOf(account),
+    18
+  );
+
+  setLoaded(false);
+  setTokenOneBalance(balance);
+  setLoaded(true);
+
+  balance = ethers.utils.formatUnits(
+    await tokens[1].token.balanceOf(account),
+    18
+  );
+  setLoaded(false);
+  setTokenTwoBalance(balance);
+  setLoaded(true);
+};
