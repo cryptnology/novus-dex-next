@@ -20,7 +20,7 @@ const Connect = ({ className }: Props) => {
         account ? "px-6" : "pl-6"
       } flex items-center rounded-xl transition ${className}`}
     >
-      <div className="pr-4 text-dark dark:text-light flex items-center">
+      <div className="pr-4 text-dark dark:text-light flex items-center transition">
         <Wallet className="w-6" />
         <span className="ml-3 text-sm">
           {balance ? Number(balance).toFixed(4) : "0"}
@@ -29,7 +29,7 @@ const Connect = ({ className }: Props) => {
       </div>
       {account ? (
         <a
-          className="flex items-center text-sm"
+          className="flex items-center text-sm transition"
           href={
             // @ts-ignore
             config[chainId]
