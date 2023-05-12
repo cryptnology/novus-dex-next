@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import {
   Connect,
   Container,
-  Dropdown,
+  SelectNetwork,
   Logo,
   MobileMenu,
   ToggleThemeButton,
@@ -57,7 +57,7 @@ const NavBar = () => {
     const novus = config[chainId].novus;
     // @ts-ignore
     const mETH = config[chainId].mETH;
-    await loadTokens(
+    loadTokens(
       provider,
       [novus.address, mETH.address],
       setTokens,
@@ -83,7 +83,7 @@ const NavBar = () => {
     <Container className="w-full py-5 flex items-center justify-between bg-light dark:bg-dark z-10 text-dark dark:text-light fixed top-0 left-0">
       <MobileMenu isOpen={isOpen} handleClick={handleClick} />
       <Logo className="hidden md:block" />
-      <Dropdown className="hidden md:block" />
+      <SelectNetwork className="hidden md:block" />
       <div className="flex items-center">
         <Connect />
         <ToggleThemeButton className="ml-6 hidden md:flex items-center justify-center rounded-full p-1 bg-primary dark:bg-primaryDark text-light dark:text-dark w-[1.65rem] h-[1.65rem] transition" />

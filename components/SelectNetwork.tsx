@@ -2,7 +2,7 @@
 
 import { useUserStore } from "@/store";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment } from "react";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import { SlHome } from "react-icons/sl";
 import { FaEthereum } from "react-icons/fa";
@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-const Dropdown = ({ className }: Props) => {
+const SelectNetwork = ({ className }: Props) => {
   const { chainId } = useUserStore();
 
   const networkHandler = async (chainId: string) => {
@@ -85,4 +85,4 @@ const Dropdown = ({ className }: Props) => {
   );
 };
 
-export default Dropdown;
+export default SelectNetwork;
