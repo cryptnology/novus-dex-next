@@ -4,10 +4,13 @@ import { Balance, Container, SelectMarket } from "@/components";
 
 const Home = () => {
   return (
-    <Container className="">
-      <main className="pt-32 text-dark dark:text-light transition">
-        <SelectMarket />
-        <Balance />
+    <Container>
+      <main className="pt-32 grid grid-cols-12 h-screen transition">
+        <div className="col-span-4 bg-secondary dark:bg-secondaryDark rounded-t-xl p-8">
+          <SelectMarket />
+          <div className="border border-primary dark:border-primaryDark w-full rounded-xl my-10" />
+          <Balance />
+        </div>
       </main>
     </Container>
   );

@@ -16,7 +16,7 @@ const Connect = ({ className }: Props) => {
 
   return (
     <div
-      className={`bg-primary/40 dark:bg-secondaryDark h-[46px] ${
+      className={`bg-secondary dark:bg-secondaryDark h-[46px] ${
         account ? "px-6" : "pl-6"
       } flex items-center rounded-xl transition ${className}`}
     >
