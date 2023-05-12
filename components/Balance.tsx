@@ -4,13 +4,14 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Contract } from "ethers";
 import Image from "next/image";
 import { Tab } from "@headlessui/react";
+import { FaEthereum } from "react-icons/fa";
 import {
   loadBalances,
   useExchangeStore,
   useTokensStore,
   useUserStore,
 } from "@/store";
-import { Button } from ".";
+import { Button, Input } from ".";
 
 const Balance = () => {
   const [token1TransferAmount, setToken1TransferAmount] = useState("");
@@ -110,7 +111,7 @@ const Balance = () => {
         <Tab.Panels className="mt-6 bg-light dark:bg-dark rounded-xl p-4 transition">
           <Tab.Panel>
             <div className="flex justify-between">
-              <p>
+              <div>
                 <span className="text-sm font-semibold">Token</span>
                 <br />
                 <div className="flex items-center">
@@ -124,7 +125,7 @@ const Balance = () => {
                   />
                   {tokens && tokens[0]?.symbol}
                 </div>
-              </p>
+              </div>
               <p>
                 <span className="text-sm font-semibold">Wallet</span>
                 <br />
@@ -140,11 +141,8 @@ const Balance = () => {
               className="mt-4"
               onSubmit={(e) => depositHandler(e, tokens[0].token)}
             >
-              <label htmlFor="token0" className="text-sm">
-                {tokens && tokens[0]?.symbol} Amount
-              </label>
-              <input
-                className="bg-secondary dark:bg-secondaryDark rounded-xl mt-1 p-3 w-full text-dark dark:text-light outline-none focus:outline-primary dark:focus:outline-primaryDark outline-offset-0"
+              <Input
+                label={`${tokens && tokens[0]?.symbol} Amount`}
                 type="text"
                 id="token0"
                 placeholder="0.0000"
@@ -154,7 +152,42 @@ const Balance = () => {
               <Button className="w-full mt-4" label="Deposit" type="submit" />
             </form>
           </Tab.Panel>
-          <Tab.Panel>Withdraw</Tab.Panel>
+          <Tab.Panel>
+            <div className="flex justify-between">
+              <div>
+                <span className="text-sm font-semibold">Token</span>
+                <br />
+                <div className="flex items-center">
+                  <FaEthereum className="mr-1" size={14} />
+                  {tokens && tokens[1]?.symbol}
+                </div>
+              </div>
+              <p>
+                <span className="text-sm font-semibold">Wallet</span>
+                <br />
+                {tokenBalances && tokenBalances[1]}
+              </p>
+              <p>
+                <span className="text-sm font-semibold">Exchange</span>
+                <br />
+                {exchangeTokenBalances && exchangeTokenBalances[1]}
+              </p>
+            </div>
+            <form
+              className="mt-4"
+              onSubmit={(e) => depositHandler(e, tokens[1].token)}
+            >
+              <Input
+                label={`${tokens && tokens[1]?.symbol} Amount`}
+                type="text"
+                id="token1"
+                placeholder="0.0000"
+                value={token2TransferAmount}
+                onChange={(e) => amountHandler(e, tokens[1].token)}
+              />
+              <Button className="w-full mt-4" label="Withdraw" type="submit" />
+            </form>
+          </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
     </div>
