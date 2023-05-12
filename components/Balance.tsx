@@ -10,6 +10,7 @@ import {
   useTokensStore,
   useUserStore,
 } from "@/store";
+import { Button } from ".";
 
 const Balance = () => {
   const [token1TransferAmount, setToken1TransferAmount] = useState("");
@@ -77,7 +78,7 @@ const Balance = () => {
 
   return (
     <div>
-      <h2 className="font-bold mb-3 text-lg">Balance</h2>
+      <h2 className="font-bold mb-3 text-lg transition">Balance</h2>
       <Tab.Group>
         <Tab.List className="flex space-x-1 rounded-xl bg-light dark:bg-dark p-1 font-bold">
           <Tab
@@ -150,12 +151,7 @@ const Balance = () => {
                 value={token1TransferAmount}
                 onChange={(e) => amountHandler(e, tokens[0].token)}
               />
-              <button
-                className="w-full mt-4 px-6 py-2 text-light font-bold bg-primary rounded-xl hover:bg-light hover:text-dark border-[3px] border-transparent hover:border-primary dark:bg-primaryDark dark:text-dark dark:hover:text-light dark:hover:border-primaryDark dark:hover:border-[3px] dark:hover:bg-dark transition duration-300"
-                type="submit"
-              >
-                <span>Deposit</span>
-              </button>
+              <Button className="w-full mt-4" label="Deposit" type="submit" />
             </form>
           </Tab.Panel>
           <Tab.Panel>Withdraw</Tab.Panel>
