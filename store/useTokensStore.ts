@@ -1,25 +1,46 @@
 import { create } from "zustand";
-import { Contract } from "ethers";
+import { Contract, Event } from "ethers";
+
+export interface Transaction {
+  transactionType: "Transfer" | "Withdraw";
+  isPending: boolean;
+  isSuccessful: boolean;
+  isError: boolean;
+}
 
 interface TokensStore {
   loaded: boolean;
   contracts: { token: Contract; symbol: string }[];
   balances: string[];
+  transaction: Transaction | {};
+  transferInProgress: boolean;
+  events: Event[];
   setLoaded: (loaded: boolean) => void;
   setContracts: (contracts: { token: Contract; symbol: string }[]) => void;
   setTokenOneBalance: (balance: string) => void;
   setTokenTwoBalance: (balance: string) => void;
+  setTransfer: (transaction: Transaction, transferInProgress: boolean) => void;
+  setEvent: (event: Event) => void;
 }
 
 const useTokensStore = create<TokensStore>((set) => ({
   loaded: false,
   contracts: [],
   balances: [],
+  transaction: {},
+  transferInProgress: false,
+  events: [],
   setLoaded: (loaded) => set(() => ({ loaded })),
   setContracts: (contracts) => set(() => ({ contracts })),
   setTokenOneBalance: (balance) => set(() => ({ balances: [balance] })),
   setTokenTwoBalance: (balance) =>
     set((store) => ({ balances: [...store.balances, balance] })),
+  setTransfer: (transaction, transferInProgress) =>
+    set(() => ({
+      transaction,
+      transferInProgress,
+    })),
+  setEvent: (event) => set((store) => ({ events: [...store.events, event] })),
 }));
 
 export default useTokensStore;

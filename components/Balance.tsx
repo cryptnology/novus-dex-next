@@ -2,11 +2,13 @@
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Contract } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
 import Image from "next/image";
 import { Tab } from "@headlessui/react";
 import { FaEthereum } from "react-icons/fa";
 import {
   loadBalances,
+  transferTokens,
   useExchangeStore,
   useTokensStore,
   useUserStore,
@@ -17,13 +19,16 @@ const Balance = () => {
   const [token1TransferAmount, setToken1TransferAmount] = useState("");
   const [token2TransferAmount, setToken2TransferAmount] = useState("");
 
-  const { account } = useUserStore();
+  const { account, provider } = useUserStore();
   const {
     contracts: tokens,
     balances: tokenBalances,
     setTokenOneBalance,
     setTokenTwoBalance,
     setLoaded,
+    transferInProgress,
+    setTransfer,
+    events,
   } = useTokensStore();
   const {
     contract: exchange,
@@ -46,7 +51,7 @@ const Balance = () => {
         setExchangeTokenTwoBalance,
         setExchangeLoaded
       );
-  }, [account, exchange, tokens]);
+  }, [account, exchange, tokens, transferInProgress]);
 
   function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(" ");
@@ -64,18 +69,20 @@ const Balance = () => {
   const depositHandler = (e: FormEvent<HTMLFormElement>, token: Contract) => {
     e.preventDefault();
 
-    // if (token.address === tokens[0].address) {
-    //   transferTokens(
-    //     provider,
-    //     exchange,
-    //     "Deposit",
-    //     token,
-    //     token1TransferAmount,
-    //     dispatch
-    //   );
-    //   setToken1TransferAmount('');
-    // }
+    if (token.address === tokens[0].token.address && provider) {
+      transferTokens(
+        provider as Web3Provider,
+        exchange as Contract,
+        "Transfer",
+        token,
+        token1TransferAmount,
+        setTransfer
+      );
+      setToken1TransferAmount("");
+    }
   };
+
+  console.log(events);
 
   return (
     <div>
