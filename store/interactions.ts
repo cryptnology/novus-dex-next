@@ -159,7 +159,9 @@ export const transferTokens = async (
   transactionType: "Transfer" | "Withdraw",
   token: Contract,
   amount: string,
-  setTransfer: (transaction: Transaction, transferInProgress: boolean) => void
+  setTransfer: (transaction: Transaction, transferInProgress: boolean) => void,
+  setAccount: (account: string) => void,
+  setBalance: (balance: string) => void
 ) => {
   let transaction;
 
@@ -197,6 +199,7 @@ export const transferTokens = async (
       },
       false
     );
+    loadAccount(provider, setAccount, setBalance);
   } catch (error) {
     setTransfer(
       {

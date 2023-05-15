@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, useEffect, useState } from "react";
 import { Contract } from "ethers";
 import { Web3Provider } from "@ethersproject/providers";
 import Image from "next/image";
@@ -14,12 +14,69 @@ import {
   useUserStore,
 } from "@/store";
 import { Button, Input } from ".";
+import React from "react";
+
+interface FormProps {
+  token: Contract;
+  tokenSymbol: string;
+  icon: ReactNode;
+  tokenBalance: string;
+  exchangeTokenBalance: string;
+  tokenTransferAmount: string;
+  depositHandler: (e: FormEvent<HTMLFormElement>, token: Contract) => void;
+  amountHandler: (e: ChangeEvent<HTMLInputElement>, token: Contract) => void;
+}
+
+const Form = ({
+  token,
+  tokenSymbol,
+  icon,
+  tokenBalance,
+  exchangeTokenBalance,
+  tokenTransferAmount,
+  depositHandler,
+  amountHandler,
+}: FormProps) => (
+  <>
+    <div className="flex justify-between">
+      <div>
+        <span className="text-sm font-semibold">Token</span>
+        <br />
+        <div className="flex items-center">
+          {icon}
+          {tokenSymbol}
+        </div>
+      </div>
+      <p>
+        <span className="text-sm font-semibold">Wallet</span>
+        <br />
+        {tokenBalance}
+      </p>
+      <p>
+        <span className="text-sm font-semibold">Exchange</span>
+        <br />
+        {exchangeTokenBalance}
+      </p>
+    </div>
+    <form className="mt-4" onSubmit={(e) => depositHandler(e, token)}>
+      <Input
+        label={`${tokenSymbol} Amount`}
+        type="text"
+        id="token1"
+        placeholder="0.0000"
+        value={tokenTransferAmount}
+        onChange={(e) => amountHandler(e, token)}
+      />
+      <Button className="w-full mt-4" label="Deposit" type="submit" />
+    </form>
+  </>
+);
 
 const Balance = () => {
   const [token1TransferAmount, setToken1TransferAmount] = useState("");
   const [token2TransferAmount, setToken2TransferAmount] = useState("");
 
-  const { account, provider } = useUserStore();
+  const { account, provider, setAccount, setBalance } = useUserStore();
   const {
     contracts: tokens,
     balances: tokenBalances,
@@ -28,7 +85,6 @@ const Balance = () => {
     setLoaded,
     transferInProgress,
     setTransfer,
-    events,
   } = useTokensStore();
   const {
     contract: exchange,
@@ -62,8 +118,7 @@ const Balance = () => {
 
     if (token.address === tokens[0].token.address)
       setToken1TransferAmount(amount);
-    if (token.address === tokens[1].token.address)
-      setToken2TransferAmount(amount);
+    else setToken2TransferAmount(amount);
   };
 
   const depositHandler = (e: FormEvent<HTMLFormElement>, token: Contract) => {
@@ -76,16 +131,28 @@ const Balance = () => {
         "Transfer",
         token,
         token1TransferAmount,
-        setTransfer
+        setTransfer,
+        setAccount,
+        setBalance
       );
       setToken1TransferAmount("");
+    } else {
+      transferTokens(
+        provider as Web3Provider,
+        exchange as Contract,
+        "Transfer",
+        token,
+        token2TransferAmount,
+        setTransfer,
+        setAccount,
+        setBalance
+      );
+      setToken2TransferAmount("");
     }
   };
 
-  console.log(events);
-
   return (
-    <div>
+    <div className="pb-6">
       <h2 className="font-bold mb-3 text-lg transition">Balance</h2>
       <Tab.Group>
         <Tab.List className="flex space-x-1 rounded-xl bg-light dark:bg-dark p-1 font-bold">
@@ -117,47 +184,49 @@ const Balance = () => {
         </Tab.List>
         <Tab.Panels className="mt-6 bg-light dark:bg-dark rounded-xl p-4 transition">
           <Tab.Panel>
-            <div className="flex justify-between">
-              <div>
-                <span className="text-sm font-semibold">Token</span>
-                <br />
-                <div className="flex items-center">
+            <Form
+              token={tokens[0]?.token}
+              tokenSymbol={tokens[0]?.symbol}
+              icon={
+                <Image
+                  className="object-contain mr-1"
+                  src="/nov.png"
+                  alt="NOV Logo"
+                  width={16}
+                  height={16}
+                  priority
+                />
+              }
+              tokenBalance={tokenBalances[0]}
+              exchangeTokenBalance={exchangeTokenBalances[0]}
+              tokenTransferAmount={token1TransferAmount}
+              depositHandler={depositHandler}
+              amountHandler={amountHandler}
+            />
+            <div className="border border-primary dark:border-primaryDark w-full rounded-xl my-10" />
+            <Form
+              token={tokens[1]?.token}
+              tokenSymbol={tokens[1]?.symbol}
+              icon={
+                tokens[1]?.symbol === "mETH" ? (
+                  <FaEthereum className="mr-1" size={14} />
+                ) : (
                   <Image
                     className="object-contain mr-1"
-                    src="/nov.png"
-                    alt="NOV Logo"
-                    width={16}
-                    height={16}
+                    src="/dai.png"
+                    alt="DAI Logo"
+                    width={14}
+                    height={14}
                     priority
                   />
-                  {tokens && tokens[0]?.symbol}
-                </div>
-              </div>
-              <p>
-                <span className="text-sm font-semibold">Wallet</span>
-                <br />
-                {tokenBalances && tokenBalances[0]}
-              </p>
-              <p>
-                <span className="text-sm font-semibold">Exchange</span>
-                <br />
-                {exchangeTokenBalances && exchangeTokenBalances[0]}
-              </p>
-            </div>
-            <form
-              className="mt-4"
-              onSubmit={(e) => depositHandler(e, tokens[0].token)}
-            >
-              <Input
-                label={`${tokens && tokens[0]?.symbol} Amount`}
-                type="text"
-                id="token0"
-                placeholder="0.0000"
-                value={token1TransferAmount}
-                onChange={(e) => amountHandler(e, tokens[0].token)}
-              />
-              <Button className="w-full mt-4" label="Deposit" type="submit" />
-            </form>
+                )
+              }
+              tokenBalance={tokenBalances[1]}
+              exchangeTokenBalance={exchangeTokenBalances[1]}
+              tokenTransferAmount={token2TransferAmount}
+              depositHandler={depositHandler}
+              amountHandler={amountHandler}
+            />
           </Tab.Panel>
           <Tab.Panel>
             <div className="flex justify-between">
