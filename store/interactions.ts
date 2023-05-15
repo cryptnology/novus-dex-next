@@ -2,7 +2,8 @@ import { Contract, Event, ethers, providers } from "ethers";
 
 import TOKEN from "@/blockchain/artifacts/blockchain/contracts/Token.sol/Token.json";
 import EXCHANGE from "@/blockchain/artifacts/blockchain/contracts/Exchange.sol/Exchange.json";
-import { Transaction } from "@/store";
+import { Transaction as TransactionType } from "@/store";
+import { Transaction } from "@/constants";
 
 export const loadProvider = (
   setProvider: (provider: providers.Web3Provider) => void
@@ -81,13 +82,29 @@ export const loadExchange = async (
 
 export const subscribeToEvents = (
   exchange: Contract,
-  setTransfer: (transaction: Transaction, transferInProgress: boolean) => void,
+  setTransfer: (
+    transaction: TransactionType,
+    transferInProgress: boolean
+  ) => void,
   setEvent: (event: Event) => void
 ) => {
-  exchange.on("Deposit", (token, user, amount, balance, event) => {
+  exchange.on(Transaction.Deposit, (token, user, amount, balance, event) => {
     setTransfer(
       {
-        transactionType: "Transfer",
+        transactionType: Transaction.Deposit,
+        isPending: false,
+        isSuccessful: true,
+        isError: false,
+      },
+      false
+    );
+    setEvent(event);
+  });
+
+  exchange.on(Transaction.Withdraw, (token, user, amount, balance, event) => {
+    setTransfer(
+      {
+        transactionType: Transaction.Withdraw,
         isPending: false,
         isSuccessful: true,
         isError: false,
@@ -156,10 +173,13 @@ export const loadBalances = async (
 export const transferTokens = async (
   provider: providers.Web3Provider,
   exchange: Contract,
-  transactionType: "Transfer" | "Withdraw",
+  transactionType: Transaction.Deposit | Transaction.Withdraw,
   token: Contract,
   amount: string,
-  setTransfer: (transaction: Transaction, transferInProgress: boolean) => void,
+  setTransfer: (
+    transaction: TransactionType,
+    transferInProgress: boolean
+  ) => void,
   setAccount: (account: string) => void,
   setBalance: (balance: string) => void
 ) => {
@@ -184,9 +204,15 @@ export const transferTokens = async (
       .approve(exchange.address, amountToTransfer);
 
     await transaction.wait();
-    transaction = await exchange
-      .connect(signer)
-      .depositToken(token.address, amountToTransfer);
+
+    if (transactionType === Transaction.Deposit)
+      transaction = await exchange
+        .connect(signer)
+        .depositToken(token.address, amountToTransfer);
+    else
+      transaction = await exchange
+        .connect(signer)
+        .withdrawToken(token.address, amountToTransfer);
 
     await transaction.wait();
 

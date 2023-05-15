@@ -1,8 +1,10 @@
 import { create } from "zustand";
 import { Contract, Event } from "ethers";
 
+import { Transaction as TransactionConst } from "@/constants";
+
 export interface Transaction {
-  transactionType: "Transfer" | "Withdraw";
+  transactionType: TransactionConst.Deposit | TransactionConst.Withdraw;
   isPending: boolean;
   isSuccessful: boolean;
   isError: boolean;
