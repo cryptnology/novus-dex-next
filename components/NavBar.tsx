@@ -19,6 +19,7 @@ import {
   loadTokens,
   useExchangeStore,
   loadExchange,
+  subscribeToEvents,
 } from "@/store";
 
 import config from "../store/config.json";
@@ -31,10 +32,18 @@ const NavBar = () => {
   };
 
   const { setProvider, setChainId, setAccount, setBalance } = useUserStore();
-  const { setContracts: setTokens, setLoaded: setTokensLoaded } =
-    useTokensStore();
-  const { setContract: setExchange, setLoaded: setExchangeLoaded } =
-    useExchangeStore();
+  const {
+    setContracts: setTokens,
+    setLoaded: setTokensLoaded,
+    setTransfer,
+    setEvent: setTokenEvent,
+  } = useTokensStore();
+  const {
+    setContract: setExchange,
+    setLoaded: setExchangeLoaded,
+    setOrder,
+    setEvent: setExchangeEvent,
+  } = useExchangeStore();
 
   const loadBlockchainData = async () => {
     const provider = loadProvider(setProvider);
@@ -72,6 +81,14 @@ const NavBar = () => {
       exchangeConfig.address,
       setExchange,
       setExchangeLoaded
+    );
+
+    subscribeToEvents(
+      exchange,
+      setTransfer,
+      setOrder,
+      setTokenEvent,
+      setExchangeEvent
     );
   };
 

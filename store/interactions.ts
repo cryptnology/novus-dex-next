@@ -2,7 +2,8 @@ import { Contract, Event, ethers, providers } from "ethers";
 
 import TOKEN from "@/blockchain/artifacts/blockchain/contracts/Token.sol/Token.json";
 import EXCHANGE from "@/blockchain/artifacts/blockchain/contracts/Exchange.sol/Exchange.json";
-import { Transaction as TransactionType } from "@/store";
+import { Transaction as TransactionType } from "@/store/useTokensStore";
+import { Transaction as OrderType } from "@/store/useExchangeStore";
 import { Transaction } from "@/constants";
 
 export const loadProvider = (
@@ -86,7 +87,9 @@ export const subscribeToEvents = (
     transaction: TransactionType,
     transferInProgress: boolean
   ) => void,
-  setEvent: (event: Event) => void
+  setOrder: (order: OrderType, orderInProgress: boolean) => void,
+  setTokenEvent: (event: Event) => void,
+  setExchangeEvent: (event: Event) => void
 ) => {
   exchange.on(Transaction.Deposit, (token, user, amount, balance, event) => {
     setTransfer(
@@ -98,7 +101,7 @@ export const subscribeToEvents = (
       },
       false
     );
-    setEvent(event);
+    setTokenEvent(event);
   });
 
   exchange.on(Transaction.Withdraw, (token, user, amount, balance, event) => {
@@ -111,8 +114,34 @@ export const subscribeToEvents = (
       },
       false
     );
-    setEvent(event);
+    setTokenEvent(event);
   });
+
+  exchange.on(
+    Transaction.Order,
+    (
+      id,
+      user,
+      tokenGet,
+      amountGet,
+      tokenGive,
+      amountGive,
+      timestamp,
+      event
+    ) => {
+      const order = event.args;
+      setOrder(
+        {
+          transactionType: Transaction.NewOrder,
+          isPending: false,
+          isSuccessful: true,
+          isError: false,
+        },
+        false
+      );
+      setExchangeEvent(event);
+    }
+  );
 };
 
 // ---------------------------------------------------------------------
@@ -186,7 +215,7 @@ export const transferTokens = async (
   let transaction;
 
   try {
-    const signer = await provider.getSigner();
+    const signer = provider.getSigner();
     const amountToTransfer = ethers.utils.parseUnits(amount.toString(), 18);
 
     setTransfer(
@@ -230,6 +259,117 @@ export const transferTokens = async (
     setTransfer(
       {
         transactionType,
+        isPending: false,
+        isSuccessful: false,
+        isError: true,
+      },
+      false
+    );
+  }
+};
+
+// ---------------------------------------------------------------------
+// ORDERS (BUY & SELL)
+
+export const makeBuyOrder = async (
+  provider: providers.Web3Provider,
+  exchange: Contract,
+  tokens: { token: Contract; symbol: string }[],
+  order: { amount: string; price: string },
+  setOrder: (order: OrderType, orderInProgress: boolean) => void
+) => {
+  const tokenGet = tokens[0].token.address;
+  const amountGet = ethers.utils.parseUnits(order.amount, 18);
+  const tokenGive = tokens[1].token.address;
+  const amountGive = ethers.utils.parseUnits(
+    (Number(order.amount) * Number(order.price)).toString(),
+    18
+  );
+
+  try {
+    const signer = provider.getSigner();
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+      true
+    );
+
+    const transaction = await exchange
+      .connect(signer)
+      .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
+    await transaction.wait();
+
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
+        isPending: false,
+        isSuccessful: true,
+        isError: false,
+      },
+      false
+    );
+  } catch (error) {
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
+        isPending: false,
+        isSuccessful: false,
+        isError: true,
+      },
+      false
+    );
+  }
+};
+
+export const makeSellOrder = async (
+  provider: providers.Web3Provider,
+  exchange: Contract,
+  tokens: { token: Contract; symbol: string }[],
+  order: { amount: string; price: string },
+  setOrder: (order: OrderType, orderInProgress: boolean) => void
+) => {
+  const tokenGet = tokens[1].token.address;
+  const amountGet = ethers.utils.parseUnits(
+    (Number(order.amount) * Number(order.price)).toString(),
+    18
+  );
+  const tokenGive = tokens[0].token.address;
+  const amountGive = ethers.utils.parseUnits(order.amount, 18);
+
+  try {
+    const signer = provider.getSigner();
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+      true
+    );
+
+    const transaction = await exchange
+      .connect(signer)
+      .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
+    await transaction.wait();
+
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
+        isPending: false,
+        isSuccessful: true,
+        isError: false,
+      },
+      false
+    );
+  } catch (error) {
+    setOrder(
+      {
+        transactionType: Transaction.NewOrder,
         isPending: false,
         isSuccessful: false,
         isError: true,

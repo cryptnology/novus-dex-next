@@ -14,6 +14,8 @@ import {
   useUserStore,
 } from "@/store";
 import { Transaction } from "@/constants";
+import { classNames } from "@/utils";
+
 import { BalanceForm } from ".";
 
 const Balance = () => {
@@ -52,10 +54,6 @@ const Balance = () => {
         setExchangeLoaded
       );
   }, [account, exchange, tokens, transferInProgress]);
-
-  function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(" ");
-  }
 
   const amountHandler = (e: ChangeEvent<HTMLInputElement>, token: Contract) => {
     const amount = e.target.value;
@@ -126,7 +124,7 @@ const Balance = () => {
   };
 
   return (
-    <div className="pb-6">
+    <>
       <h2 className="font-bold mb-3 text-lg transition">Balance</h2>
       <Tab.Group>
         <Tab.List className="flex space-x-1 rounded-xl bg-light dark:bg-dark p-1 font-bold">
@@ -178,7 +176,7 @@ const Balance = () => {
               amountHandler={amountHandler}
               btnLabel="Deposit"
             />
-            <div className="border border-primary dark:border-primaryDark w-full rounded-xl my-10" />
+            <div className="border border-primary dark:border-primaryDark w-full rounded-xl mt-10 mb-8" />
             <BalanceForm
               token={tokens[1]?.token}
               tokenSymbol={tokens[1]?.symbol}
@@ -253,7 +251,7 @@ const Balance = () => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-    </div>
+    </>
   );
 };
 
