@@ -217,7 +217,7 @@ const Balance = () => {
               amountHandler={amountHandler}
               btnLabel="Withdraw"
             />
-            <div className="border border-primary dark:border-primaryDark w-full rounded-xl my-10" />
+            <div className="border border-primary dark:border-primaryDark w-full rounded-xl mt-10 mb-8" />
             <BalanceForm
               token={tokens[1]?.token}
               tokenSymbol={tokens[1]?.symbol}
