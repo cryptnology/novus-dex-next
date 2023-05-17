@@ -89,7 +89,20 @@ export const subscribeToEvents = (
   ) => void,
   setOrder: (order: OrderType, orderInProgress: boolean) => void,
   setTokenEvent: (event: Event) => void,
-  setExchangeEvent: (event: Event) => void
+  setExchangeEvent: (event: Event) => void,
+  provider: providers.Web3Provider,
+  setAllOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void,
+  setCancelledOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void,
+  setFilledOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void
 ) => {
   exchange.on(Transaction.Deposit, (token, user, amount, balance, event) => {
     setTransfer(
@@ -139,6 +152,13 @@ export const subscribeToEvents = (
         false
       );
       setExchangeEvent(event);
+      loadAllOrders(
+        provider,
+        exchange,
+        setAllOrders,
+        setCancelledOrders,
+        setFilledOrders
+      );
     }
   );
 };

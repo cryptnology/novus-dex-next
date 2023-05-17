@@ -100,7 +100,11 @@ const NavBar = () => {
       setTransfer,
       setOrder,
       setTokenEvent,
-      setExchangeEvent
+      setExchangeEvent,
+      provider,
+      setAllOrders,
+      setCancelledOrders,
+      setFilledOrders
     );
   };
 
