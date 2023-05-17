@@ -22,7 +22,7 @@ const Balance = () => {
   const [token1TransferAmount, setToken1TransferAmount] = useState("");
   const [token2TransferAmount, setToken2TransferAmount] = useState("");
 
-  const { account, provider, setAccount, setBalance } = useUserStore();
+  const { account, provider } = useUserStore();
   const {
     contracts: tokens,
     balances: tokenBalances,
@@ -73,9 +73,7 @@ const Balance = () => {
         Transaction.Deposit,
         token,
         token1TransferAmount,
-        setTransfer,
-        setAccount,
-        setBalance
+        setTransfer
       );
       setToken1TransferAmount("");
     } else {
@@ -85,9 +83,7 @@ const Balance = () => {
         Transaction.Deposit,
         token,
         token2TransferAmount,
-        setTransfer,
-        setAccount,
-        setBalance
+        setTransfer
       );
       setToken2TransferAmount("");
     }
@@ -103,9 +99,7 @@ const Balance = () => {
         Transaction.Withdraw,
         token,
         token1TransferAmount,
-        setTransfer,
-        setAccount,
-        setBalance
+        setTransfer
       );
       setToken1TransferAmount("");
     } else {
@@ -115,9 +109,7 @@ const Balance = () => {
         Transaction.Withdraw,
         token,
         token2TransferAmount,
-        setTransfer,
-        setAccount,
-        setBalance
+        setTransfer
       );
       setToken2TransferAmount("");
     }

@@ -102,7 +102,9 @@ export const subscribeToEvents = (
   setFilledOrders: (order: {
     loaded: boolean;
     data: (ethers.utils.Result | undefined)[];
-  }) => void
+  }) => void,
+  setAccount: (account: string) => void,
+  setBalance: (balance: string) => void
 ) => {
   exchange.on(Transaction.Deposit, (token, user, amount, balance, event) => {
     setTransfer(
@@ -115,6 +117,7 @@ export const subscribeToEvents = (
       false
     );
     setTokenEvent(event);
+    loadAccount(provider, setAccount, setBalance);
   });
 
   exchange.on(Transaction.Withdraw, (token, user, amount, balance, event) => {
@@ -128,6 +131,7 @@ export const subscribeToEvents = (
       false
     );
     setTokenEvent(event);
+    loadAccount(provider, setAccount, setBalance);
   });
 
   exchange.on(
@@ -159,6 +163,7 @@ export const subscribeToEvents = (
         setCancelledOrders,
         setFilledOrders
       );
+      loadAccount(provider, setAccount, setBalance);
     }
   );
 };
@@ -267,9 +272,7 @@ export const transferTokens = async (
   setTransfer: (
     transaction: TransactionType,
     transferInProgress: boolean
-  ) => void,
-  setAccount: (account: string) => void,
-  setBalance: (balance: string) => void
+  ) => void
 ) => {
   let transaction;
 
@@ -313,7 +316,6 @@ export const transferTokens = async (
       },
       false
     );
-    loadAccount(provider, setAccount, setBalance);
   } catch (error) {
     setTransfer(
       {

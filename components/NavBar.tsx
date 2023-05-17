@@ -104,7 +104,9 @@ const NavBar = () => {
       provider,
       setAllOrders,
       setCancelledOrders,
-      setFilledOrders
+      setFilledOrders,
+      setAccount,
+      setBalance
     );
   };
 
