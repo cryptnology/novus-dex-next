@@ -22,7 +22,7 @@ const OrderForm = ({
   inputLabel,
 }: Props) => {
   return (
-    <div className="flex justify-between">
+    <div className="">
       <form onSubmit={transactionHandler}>
         <Input
           className="mb-2"

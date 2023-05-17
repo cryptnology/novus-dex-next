@@ -129,7 +129,6 @@ export const subscribeToEvents = (
       timestamp,
       event
     ) => {
-      const order = event.args;
       setOrder(
         {
           transactionType: Transaction.NewOrder,
@@ -194,6 +193,46 @@ export const loadBalances = async (
   setExchangeLoaded(false);
   setExchangeTokenTwoBalance(balance);
   setExchangeLoaded(true);
+};
+
+// ---------------------------------------------------------------------
+// LOAD ALL ORDERS
+
+export const loadAllOrders = async (
+  provider: providers.Web3Provider,
+  exchange: Contract,
+  setAllOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void,
+  setCancelledOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void,
+  setFilledOrders: (order: {
+    loaded: boolean;
+    data: (ethers.utils.Result | undefined)[];
+  }) => void
+) => {
+  const block = await provider.getBlockNumber();
+
+  // Fetch cancelled orders
+  const cancelStream = await exchange.queryFilter(Transaction.Cancel, 0, block);
+  const cancelledOrders = cancelStream.map((event) => event.args);
+
+  setCancelledOrders({ loaded: true, data: cancelledOrders });
+
+  // Fetch filled orders
+  const tradeStream = await exchange.queryFilter(Transaction.Trade, 0, block);
+  const filledOrders = tradeStream.map((event) => event.args);
+
+  setFilledOrders({ loaded: true, data: filledOrders });
+
+  // Fetch all orders
+  const orderStream = await exchange.queryFilter(Transaction.Order, 0, block);
+  const allOrders = orderStream.map((event) => event.args);
+
+  setAllOrders({ loaded: true, data: allOrders });
 };
 
 // ---------------------------------------------------------------------

@@ -20,6 +20,7 @@ import {
   useExchangeStore,
   loadExchange,
   subscribeToEvents,
+  loadAllOrders,
 } from "@/store";
 
 import config from "../store/config.json";
@@ -43,6 +44,9 @@ const NavBar = () => {
     setLoaded: setExchangeLoaded,
     setOrder,
     setEvent: setExchangeEvent,
+    setAllOrders,
+    setCancelledOrders,
+    setFilledOrders,
   } = useExchangeStore();
 
   const loadBlockchainData = async () => {
@@ -81,6 +85,14 @@ const NavBar = () => {
       exchangeConfig.address,
       setExchange,
       setExchangeLoaded
+    );
+
+    loadAllOrders(
+      provider,
+      exchange,
+      setAllOrders,
+      setCancelledOrders,
+      setFilledOrders
     );
 
     subscribeToEvents(

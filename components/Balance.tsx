@@ -125,7 +125,9 @@ const Balance = () => {
 
   return (
     <>
-      <h2 className="font-bold mb-3 text-lg transition">Balance</h2>
+      <h2 className="font-bold mb-3 text-lg transition text-dark dark:text-light">
+        Balance
+      </h2>
       <Tab.Group>
         <Tab.List className="flex space-x-1 rounded-xl bg-light dark:bg-dark p-1 font-bold">
           <Tab

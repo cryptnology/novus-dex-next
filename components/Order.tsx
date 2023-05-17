@@ -50,8 +50,10 @@ const Order = () => {
   };
 
   return (
-    <>
-      <h2 className="font-bold mb-3 text-lg transition">New Order</h2>
+    <div className="mb-5">
+      <h2 className="font-bold mb-3 text-lg text-dark dark:text-light transition">
+        New Order
+      </h2>
       <Tab.Group>
         <Tab.List className="flex space-x-1 rounded-xl bg-light dark:bg-dark p-1 font-bold">
           <Tab
@@ -105,7 +107,7 @@ const Order = () => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-    </>
+    </div>
   );
 };
 
