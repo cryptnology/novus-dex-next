@@ -125,7 +125,7 @@ const Home = () => {
         </main>
       ) : (
         <main className="h-screen transition flex justify-center items-center">
-          <h1 className="text-dark dark:text-light text-xl lg:text-2xl">
+          <h1 className="text-dark dark:text-light font-semi text-xl lg:text-2xl">
             Please connect to MetaMask
           </h1>
         </main>

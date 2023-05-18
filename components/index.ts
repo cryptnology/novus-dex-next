@@ -13,6 +13,6 @@ export { default as NavBar } from "./NavBar";
 export { default as Order } from "./Order";
 export { default as OrderBook } from "./OrderBook";
 export { default as OrderForm } from "./OrderForm";
-export { default as PriceChart } from "./PriceChart";
+export { default as PriceChart } from "./PriceChart/PriceChart";
 export { default as Providers } from "./Providers";
 export { default as ToggleThemeButton } from "./ToggleThemeButton";

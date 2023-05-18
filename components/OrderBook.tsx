@@ -20,7 +20,7 @@ const OrderBook = () => {
       <div className="grid sm:flex gap-5">
         <table className="w-full text-left">
           <caption className="text-left font-semibold mb-2">Selling</caption>
-          {sellOrders ? (
+          {sellOrders.length > 0 ? (
             <>
               <thead>
                 <tr className="text-xs opacity-50 text-dark dark:text-light transition">
@@ -59,12 +59,12 @@ const OrderBook = () => {
               </tbody>
             </>
           ) : (
-            <caption>No sell orders</caption>
+            <caption className="mt-10">No sell orders</caption>
           )}
         </table>
         <table className="w-full text-left">
           <caption className="text-left font-semibold mb-2">Buying</caption>
-          {buyOrders ? (
+          {buyOrders.length > 0 ? (
             <>
               <thead>
                 <tr className="text-xs opacity-50 text-dark dark:text-light transition">
@@ -103,7 +103,7 @@ const OrderBook = () => {
               </tbody>
             </>
           ) : (
-            <caption>No buy orders</caption>
+            <caption className="mt-10">No buy orders</caption>
           )}
         </table>
       </div>
