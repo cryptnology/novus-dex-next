@@ -8,6 +8,7 @@ import {
   OrderBook,
   PriceChart,
   SelectMarket,
+  Trades,
 } from "@/components";
 import {
   loadAccount,
@@ -120,6 +121,7 @@ const Home = () => {
           </div>
           <div className="lg:col-span-7 xl:col-span-8 grid gap-4">
             <PriceChart />
+            <Trades />
             <OrderBook />
           </div>
         </main>

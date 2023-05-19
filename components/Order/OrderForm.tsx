@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction } from "react";
 
-import { Button, Input } from ".";
+import { Button, Input } from "..";
 
 interface Props {
   amount: string;

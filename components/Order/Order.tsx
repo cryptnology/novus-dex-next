@@ -13,7 +13,7 @@ import {
   useUserStore,
 } from "@/store";
 
-import { OrderForm } from ".";
+import OrderForm from "./OrderForm";
 
 const Order = () => {
   const [amount, setAmount] = useState("");
