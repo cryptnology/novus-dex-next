@@ -21,11 +21,15 @@ const OrderBook = () => {
       <div className="grid sm:flex gap-5">
         <table className="w-full text-left">
           <caption className="text-left font-semibold mb-2">Selling</caption>
-          <OrderBookTable orders={sellOrders} tokens={tokens} />
+          <OrderBookTable
+            orders={sellOrders}
+            tokens={tokens}
+            orderType="sell"
+          />
         </table>
         <table className="w-full text-left">
           <caption className="text-left font-semibold mb-2">Buying</caption>
-          <OrderBookTable orders={buyOrders} tokens={tokens} />
+          <OrderBookTable orders={buyOrders} tokens={tokens} orderType="buy" />
         </table>
       </div>
     </div>

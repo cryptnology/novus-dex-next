@@ -7,9 +7,10 @@ interface Props {
     token: Contract;
     symbol: string;
   }[];
+  orderType: "buy" | "sell";
 }
 
-const OrderBookTable = ({ orders, tokens }: Props) => {
+const OrderBookTable = ({ orders, tokens, orderType }: Props) => {
   return (
     <>
       {orders.length > 0 ? (
@@ -57,7 +58,7 @@ const OrderBookTable = ({ orders, tokens }: Props) => {
           </tbody>
         </>
       ) : (
-        <caption className="mt-10">{`No ${orders[0]?.orderType} orders`}</caption>
+        <caption className="mt-10">{`No ${orderType} orders`}</caption>
       )}
     </>
   );
